@@ -1,200 +1,401 @@
-/**
-* Template Name: Dewi - v2.0.0
-* Template URL: https://bootstrapmade.com/dewi-free-multi-purpose-html-template/
-* Author: BootstrapMade.com
-* License: https://bootstrapmade.com/license/
+/*
+	Dimension by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 */
-!(function($) {
-  "use strict";
 
-  // Preloader
-  $(window).on('load', function() {
-    if ($('#preloader').length) {
-      $('#preloader').delay(100).fadeOut('slow', function() {
-        $(this).remove();
-      });
-    }
-  });
+(function($) {
 
-  // Smooth scroll for the navigation menu and links with .scrollto classes
-  $(document).on('click', '.nav-menu a, .mobile-nav a, .scrollto', function(e) {
-    if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
-      e.preventDefault();
-      var target = $(this.hash);
-      if (target.length) {
+	var	$window = $(window),
+		$body = $('body'),
+		$wrapper = $('#wrapper'),
+		$header = $('#header'),
+		$footer = $('#footer'),
+		$main = $('#main'),
+		$main_articles = $main.children('article');
 
-        var scrollto = target.offset().top;
-        var scrolled = 16;
+	// Breakpoints.
+		breakpoints({
+			xlarge:   [ '1281px',  '1680px' ],
+			large:    [ '981px',   '1280px' ],
+			medium:   [ '737px',   '980px'  ],
+			small:    [ '481px',   '736px'  ],
+			xsmall:   [ '361px',   '480px'  ],
+			xxsmall:  [ null,      '360px'  ]
+		});
 
-        if ($('#header').length) {
-          scrollto -= $('#header').outerHeight()
+	// Play initial animations on page load.
+		$window.on('load', function() {
+			window.setTimeout(function() {
+				$body.removeClass('is-preload');
+			}, 100);
+		});
 
-          if (!$('#header').hasClass('header-scrolled')) {
-            scrollto += scrolled;
-          }
-        }
+	// Fix: Flexbox min-height bug on IE.
+		if (browser.name == 'ie') {
 
-        if ($(this).attr("href") == '#header') {
-          scrollto = 0;
-        }
+			var flexboxFixTimeoutId;
 
-        $('html, body').animate({
-          scrollTop: scrollto
-        }, 1500, 'easeInOutExpo');
+			$window.on('resize.flexbox-fix', function() {
 
-        if ($(this).parents('.nav-menu, .mobile-nav').length) {
-          $('.nav-menu .active, .mobile-nav .active').removeClass('active');
-          $(this).closest('li').addClass('active');
-        }
+				clearTimeout(flexboxFixTimeoutId);
 
-        if ($('body').hasClass('mobile-nav-active')) {
-          $('body').removeClass('mobile-nav-active');
-          $('.mobile-nav-toggle i').toggleClass('icofont-navigation-menu icofont-close');
-          $('.mobile-nav-overly').fadeOut();
-        }
-        return false;
-      }
-    }
-  });
+				flexboxFixTimeoutId = setTimeout(function() {
 
-  // Mobile Navigation
-  if ($('.nav-menu').length) {
-    var $mobile_nav = $('.nav-menu').clone().prop({
-      class: 'mobile-nav d-lg-none'
-    });
-    $('body').append($mobile_nav);
-    $('body').prepend('<button type="button" class="mobile-nav-toggle d-lg-none"><i class="icofont-navigation-menu"></i></button>');
-    $('body').append('<div class="mobile-nav-overly"></div>');
+					if ($wrapper.prop('scrollHeight') > $window.height())
+						$wrapper.css('height', 'auto');
+					else
+						$wrapper.css('height', '100vh');
 
-    $(document).on('click', '.mobile-nav-toggle', function(e) {
-      $('body').toggleClass('mobile-nav-active');
-      $('.mobile-nav-toggle i').toggleClass('icofont-navigation-menu icofont-close');
-      $('.mobile-nav-overly').toggle();
-    });
+				}, 250);
 
-    $(document).on('click', '.mobile-nav .drop-down > a', function(e) {
-      e.preventDefault();
-      $(this).next().slideToggle(300);
-      $(this).parent().toggleClass('active');
-    });
+			}).triggerHandler('resize.flexbox-fix');
 
-    $(document).click(function(e) {
-      var container = $(".mobile-nav, .mobile-nav-toggle");
-      if (!container.is(e.target) && container.has(e.target).length === 0) {
-        if ($('body').hasClass('mobile-nav-active')) {
-          $('body').removeClass('mobile-nav-active');
-          $('.mobile-nav-toggle i').toggleClass('icofont-navigation-menu icofont-close');
-          $('.mobile-nav-overly').fadeOut();
-        }
-      }
-    });
-  } else if ($(".mobile-nav, .mobile-nav-toggle").length) {
-    $(".mobile-nav, .mobile-nav-toggle").hide();
-  }
+		}
 
-  // Navigation active state on scroll
-  var nav_sections = $('section');
-  var main_nav = $('.nav-menu, #mobile-nav');
+	// Nav.
+		var $nav = $header.children('nav'),
+			$nav_li = $nav.find('li');
 
-  $(window).on('scroll', function() {
-    var cur_pos = $(this).scrollTop() + 90;
+		// Add "middle" alignment classes if we're dealing with an even number of items.
+			if ($nav_li.length % 2 == 0) {
 
-    nav_sections.each(function() {
-      var top = $(this).offset().top,
-        bottom = top + $(this).outerHeight();
+				$nav.addClass('use-middle');
+				$nav_li.eq( ($nav_li.length / 2) ).addClass('is-middle');
 
-      if (cur_pos >= top && cur_pos <= bottom) {
-        if (cur_pos <= bottom) {
-          main_nav.find('li').removeClass('active');
-        }
-        main_nav.find('a[href="#' + $(this).attr('id') + '"]').parent('li').addClass('active');
-      }
-      if (cur_pos < 300) {
-        $(".nav-menu ul:first li:first").addClass('active');
-      }
-    });
-  });
+			}
 
-  // Toggle .header-scrolled class to #header when page is scrolled
-  $(window).scroll(function() {
-    if ($(this).scrollTop() > 100) {
-      $('#header').addClass('header-scrolled');
-    } else {
-      $('#header').removeClass('header-scrolled');
-    }
-  });
+	// Main.
+		var	delay = 325,
+			locked = false;
 
-  if ($(window).scrollTop() > 100) {
-    $('#header').addClass('header-scrolled');
-  }
+		// Methods.
+			$main._show = function(id, initial) {
 
-  // Back to top button
-  $(window).scroll(function() {
-    if ($(this).scrollTop() > 100) {
-      $('.back-to-top').fadeIn('slow');
-    } else {
-      $('.back-to-top').fadeOut('slow');
-    }
-  });
+				var $article = $main_articles.filter('#' + id);
 
-  $('.back-to-top').click(function() {
-    $('html, body').animate({
-      scrollTop: 0
-    }, 1500, 'easeInOutExpo');
-    return false;
-  });
+				// No such article? Bail.
+					if ($article.length == 0)
+						return;
 
-  // jQuery counterUp
-  $('[data-toggle="counter-up"]').counterUp({
-    delay: 10,
-    time: 1000
-  });
+				// Handle lock.
 
-  // Testimonials carousel (uses the Owl Carousel library)
-  $(".testimonials-carousel").owlCarousel({
-    autoplay: true,
-    dots: true,
-    loop: true,
-    items: 1
-  });
+					// Already locked? Speed through "show" steps w/o delays.
+						if (locked || (typeof initial != 'undefined' && initial === true)) {
 
-  // Porfolio isotope and filter
-  $(window).on('load', function() {
-    var portfolioIsotope = $('.portfolio-container').isotope({
-      itemSelector: '.portfolio-item'
-    });
+							// Mark as switching.
+								$body.addClass('is-switching');
 
-    $('#portfolio-flters li').on('click', function() {
-      $("#portfolio-flters li").removeClass('filter-active');
-      $(this).addClass('filter-active');
+							// Mark as visible.
+								$body.addClass('is-article-visible');
 
-      portfolioIsotope.isotope({
-        filter: $(this).data('filter')
-      });
-      aos_init();
-    });
+							// Deactivate all articles (just in case one's already active).
+								$main_articles.removeClass('active');
 
-    // Initiate venobox (lightbox feature used in portofilo)
-    $(document).ready(function() {
-      $('.venobox').venobox();
-    });
-  });
+							// Hide header, footer.
+								$header.hide();
+								$footer.hide();
 
-  // Portfolio details carousel
-  $(".portfolio-details-carousel").owlCarousel({
-    autoplay: true,
-    dots: true,
-    loop: true,
-    items: 1
-  });
+							// Show main, article.
+								$main.show();
+								$article.show();
 
-  // Initi AOS
-  function aos_init() {
-    AOS.init({
-      duration: 1000,
-      once: true
-    });
-  }
-  aos_init();
+							// Activate article.
+								$article.addClass('active');
+
+							// Unlock.
+								locked = false;
+
+							// Unmark as switching.
+								setTimeout(function() {
+									$body.removeClass('is-switching');
+								}, (initial ? 1000 : 0));
+
+							return;
+
+						}
+
+					// Lock.
+						locked = true;
+
+				// Article already visible? Just swap articles.
+					if ($body.hasClass('is-article-visible')) {
+
+						// Deactivate current article.
+							var $currentArticle = $main_articles.filter('.active');
+
+							$currentArticle.removeClass('active');
+
+						// Show article.
+							setTimeout(function() {
+
+								// Hide current article.
+									$currentArticle.hide();
+
+								// Show article.
+									$article.show();
+
+								// Activate article.
+									setTimeout(function() {
+
+										$article.addClass('active');
+
+										// Window stuff.
+											$window
+												.scrollTop(0)
+												.triggerHandler('resize.flexbox-fix');
+
+										// Unlock.
+											setTimeout(function() {
+												locked = false;
+											}, delay);
+
+									}, 25);
+
+							}, delay);
+
+					}
+
+				// Otherwise, handle as normal.
+					else {
+
+						// Mark as visible.
+							$body
+								.addClass('is-article-visible');
+
+						// Show article.
+							setTimeout(function() {
+
+								// Hide header, footer.
+									$header.hide();
+									$footer.hide();
+
+								// Show main, article.
+									$main.show();
+									$article.show();
+
+								// Activate article.
+									setTimeout(function() {
+
+										$article.addClass('active');
+
+										// Window stuff.
+											$window
+												.scrollTop(0)
+												.triggerHandler('resize.flexbox-fix');
+
+										// Unlock.
+											setTimeout(function() {
+												locked = false;
+											}, delay);
+
+									}, 25);
+
+							}, delay);
+
+					}
+
+			};
+
+			$main._hide = function(addState) {
+
+				var $article = $main_articles.filter('.active');
+
+				// Article not visible? Bail.
+					if (!$body.hasClass('is-article-visible'))
+						return;
+
+				// Add state?
+					if (typeof addState != 'undefined'
+					&&	addState === true)
+						history.pushState(null, null, '#');
+
+				// Handle lock.
+
+					// Already locked? Speed through "hide" steps w/o delays.
+						if (locked) {
+
+							// Mark as switching.
+								$body.addClass('is-switching');
+
+							// Deactivate article.
+								$article.removeClass('active');
+
+							// Hide article, main.
+								$article.hide();
+								$main.hide();
+
+							// Show footer, header.
+								$footer.show();
+								$header.show();
+
+							// Unmark as visible.
+								$body.removeClass('is-article-visible');
+
+							// Unlock.
+								locked = false;
+
+							// Unmark as switching.
+								$body.removeClass('is-switching');
+
+							// Window stuff.
+								$window
+									.scrollTop(0)
+									.triggerHandler('resize.flexbox-fix');
+
+							return;
+
+						}
+
+					// Lock.
+						locked = true;
+
+				// Deactivate article.
+					$article.removeClass('active');
+
+				// Hide article.
+					setTimeout(function() {
+
+						// Hide article, main.
+							$article.hide();
+							$main.hide();
+
+						// Show footer, header.
+							$footer.show();
+							$header.show();
+
+						// Unmark as visible.
+							setTimeout(function() {
+
+								$body.removeClass('is-article-visible');
+
+								// Window stuff.
+									$window
+										.scrollTop(0)
+										.triggerHandler('resize.flexbox-fix');
+
+								// Unlock.
+									setTimeout(function() {
+										locked = false;
+									}, delay);
+
+							}, 25);
+
+					}, delay);
+
+
+			};
+
+		// Articles.
+			$main_articles.each(function() {
+
+				var $this = $(this);
+
+				// Close.
+					$('<div class="close">Close</div>')
+						.appendTo($this)
+						.on('click', function() {
+							location.hash = '';
+						});
+
+				// Prevent clicks from inside article from bubbling.
+					$this.on('click', function(event) {
+						event.stopPropagation();
+					});
+
+			});
+
+		// Events.
+			$body.on('click', function(event) {
+
+				// Article visible? Hide.
+					if ($body.hasClass('is-article-visible'))
+						$main._hide(true);
+
+			});
+
+			$window.on('keyup', function(event) {
+
+				switch (event.keyCode) {
+
+					case 27:
+
+						// Article visible? Hide.
+							if ($body.hasClass('is-article-visible'))
+								$main._hide(true);
+
+						break;
+
+					default:
+						break;
+
+				}
+
+			});
+
+			$window.on('hashchange', function(event) {
+
+				// Empty hash?
+					if (location.hash == ''
+					||	location.hash == '#') {
+
+						// Prevent default.
+							event.preventDefault();
+							event.stopPropagation();
+
+						// Hide.
+							$main._hide();
+
+					}
+
+				// Otherwise, check for a matching article.
+					else if ($main_articles.filter(location.hash).length > 0) {
+
+						// Prevent default.
+							event.preventDefault();
+							event.stopPropagation();
+
+						// Show article.
+							$main._show(location.hash.substr(1));
+
+					}
+
+			});
+
+		// Scroll restoration.
+		// This prevents the page from scrolling back to the top on a hashchange.
+			if ('scrollRestoration' in history)
+				history.scrollRestoration = 'manual';
+			else {
+
+				var	oldScrollPos = 0,
+					scrollPos = 0,
+					$htmlbody = $('html,body');
+
+				$window
+					.on('scroll', function() {
+
+						oldScrollPos = scrollPos;
+						scrollPos = $htmlbody.scrollTop();
+
+					})
+					.on('hashchange', function() {
+						$window.scrollTop(oldScrollPos);
+					});
+
+			}
+
+		// Initialize.
+
+			// Hide main, articles.
+				$main.hide();
+				$main_articles.hide();
+
+			// Initial article.
+				if (location.hash != ''
+				&&	location.hash != '#')
+					$window.on('load', function() {
+						$main._show(location.hash.substr(1), true);
+					});
 
 })(jQuery);
