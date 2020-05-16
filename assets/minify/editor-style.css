@@ -1,0 +1,115 @@
+.duxq.anz button {
+   margin: 10px;
+   padding: .5em 1em;
+   min-width: 33px;
+   min-height: 33px;
+   cursor: pointer
+ }
+ .duxq.anz button:hover {
+   box-shadow: 0 0 10px #ddd;
+   opacity: .8
+ }
+ .qe_wzk_hong {
+   margin: 10px 0;
+   padding: .6em 1em;
+   border: 1px solid #f1d3d3;
+   border-radius: 4px;
+   background: #fff7f7;
+   color: #dc3f3f
+ }
+ .qe_wzk_lan {
+   margin: 10px 0;
+   padding: .6em 1em;
+   border: 1px solid #b3daf1;
+   border-radius: 4px;
+   background: #f7fcff;
+   color: #197cb1
+ }
+ .qe_wzk_hui {
+   margin: 10px 0;
+   padding: .6em 1em;
+   border: 1px solid #d4d4d4;
+   background: #f5f5f5;
+   color: #757575
+ }
+ .qe_wzk_lv {
+   margin: 10px 0;
+   padding: .6em 1em;
+   border: 1px solid #b4e6b1;
+   border-radius: 4px;
+   background: #f7fff9;
+   color: #1d9c24
+ }
+ .quote_q:before {
+   content: "“";
+   position: absolute;
+   color: #ccc;
+   font-size: 120px;
+   top: -60px;
+   left: 0
+ }
+ .qe_fxan {
+   display: inline-block;
+   margin: .5em;
+   padding: .6em .8em;
+   min-width: 80px;
+   border: none;
+   border-radius: 60px;
+   box-shadow: -1px 4px 10px rgba(0,0,0,.2);
+   color: #fff;
+   text-align: center;
+   transition: all .2s ease
+ }
+ .qe_fxan a,.qe_fxan a:hover {
+   color: #fff
+ }
+ .qe_fxan.b1 {
+    display: inline-block;
+    border-radius: 5px;
+    padding: 5px 7px;
+    margin: 0 4px;
+    line-height: 1em;
+    text-indent: 0;
+	color: darkred;
+	background: linear-gradient(90deg,#ff4949,#ff7849);
+ }
+ .qe_fxan.b2 {
+    display: inline-block;
+    border-radius: 5px;
+    padding: 5px 7px;
+    margin: 0 4px;
+    line-height: 1em;
+    text-indent: 0;
+    color: #1d9832;
+    background-color: #a9f3d5;
+ }
+ .qe_fxan.b3 {
+    display: inline-block;
+    border-radius: 5px;
+    padding: 5px 7px;
+    margin: 0 4px;
+    line-height: 1em;
+    text-indent: 0;
+	color: green;
+	background: linear-gradient(90deg,#61be33,#8fce44);
+ }
+ .qe_fxan.b4 {
+	display: inline-block;
+    border-radius: 5px;
+    padding: 5px 7px;
+    margin: 0 4px;
+    line-height: 1em;
+    text-indent: 0;
+	color: #1d9832;
+	background: linear-gradient(90deg,#ff953f,#ffb449);
+ }
+ .qe_fxan.b5 {
+    display: inline-block;
+    border-radius: 5px;
+    padding: 5px 7px;
+    margin: 0 4px;
+    line-height: 1em;
+    text-indent: 0;
+    color: #418fff;
+    background-color: rgb(181, 232, 255);
+ }
